@@ -25,45 +25,39 @@ import java.util.List;
 
 /**
  * Created by liuxuliangcumt on 2017/10/30.
- * 四级联动
+ * 三级联动
  */
 
-public class PickAddressView extends LinearLayout {
+public class PickAddressThreeView extends LinearLayout {
     /**
      * 与选择地址相关
      */
     protected ArrayList<String> mProvinceDatas = new ArrayList<>();
-
     private WheelView mProvincePicker;
     private WheelView mCityPicker;
     private WheelView mCountyPicker;
-    private WheelView mStreetPicker;
     protected String mCurrentProviceName;
     protected String mCurrentCityName;
     protected String mCurrentDistrictName;
-    protected String mCurrentStreetName;
     private TextView cancel, ok;
     protected boolean isDataLoaded = false;
     private Context context;
     private PickAddressInterface pickAddressInterface;
-
-    public PickAddressView(Context context, @Nullable AttributeSet attrs) {
+    public PickAddressThreeView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0);
-        LayoutInflater.from(context).inflate(R.layout.address, this);
+        LayoutInflater.from(context).inflate(R.layout.addressthree, this);
         this.context = context;
         initData();
     }
 
-    public PickAddressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PickAddressThreeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
     }
 
     private void initData() {
         mProvincePicker = (WheelView) findViewById(R.id.province);
         mCityPicker = (WheelView) findViewById(R.id.city);
         mCountyPicker = (WheelView) findViewById(R.id.county);
-        mStreetPicker = (WheelView) findViewById(R.id.street);
         cancel = (TextView) findViewById(R.id.box_cancel);
         ok = (TextView) findViewById(R.id.box_ok);
 
@@ -96,11 +90,6 @@ public class PickAddressView extends LinearLayout {
                     for (int i = 0; i < streetChildsBeans.size(); i++) {
                         mStreetData.add(streetChildsBeans.get(i).getName());
                     }
-                    mStreetPicker.resetData(mStreetData);
-                    mStreetPicker.setDefault(0);
-                    mCurrentStreetName = mStreetData.get(0);
-
-
                 }
             }
 
@@ -122,13 +111,6 @@ public class PickAddressView extends LinearLayout {
                 mCurrentDistrictName = mCountyData.get(0);
 
                 streetChildsBeans = countyChildsBeans.get(0).getChilds();
-                ArrayList<String> mStreetData = new ArrayList<>();
-                for (int i = 0; i < streetChildsBeans.size(); i++) {
-                    mStreetData.add(streetChildsBeans.get(i).getName());
-                }
-                mStreetPicker.resetData(mStreetData);
-                mStreetPicker.setDefault(0);
-                mCurrentStreetName = mStreetData.get(0);
 
             }
 
@@ -144,16 +126,7 @@ public class PickAddressView extends LinearLayout {
                 String currentname = countyChildsBeans.get(id).getName();
                 if (!mCurrentDistrictName.equals(currentname)) {
                     mCurrentDistrictName = currentname;
-
                     streetChildsBeans = countyChildsBeans.get(id).getChilds();
-                    ArrayList<String> mStreetData = new ArrayList<>();
-                    for (int i = 0; i < streetChildsBeans.size(); i++) {
-                        mStreetData.add(streetChildsBeans.get(i).getName());
-                    }
-                    mStreetPicker.resetData(mStreetData);
-                    mStreetPicker.setDefault(0);
-                    mCurrentStreetName = mStreetData.get(0);
-
                 }
             }
 
@@ -162,7 +135,6 @@ public class PickAddressView extends LinearLayout {
 
             }
         });
-
 
         ok.setOnClickListener(new OnClickListener() {
             @Override
@@ -183,18 +155,10 @@ public class PickAddressView extends LinearLayout {
             }
         });
     }
-
-    /**
-     * 读取地址数据，请使用线程进行调用
-     *
-     * @return
-     */
     List<AddressBean> addressBeanList;
     List<AddressBean.CityChildsBean> cityChildsBeans = new ArrayList<>();
     List<AddressBean.CityChildsBean.CountyChildsBean> countyChildsBeans = new ArrayList<>();
     List<AddressBean.CityChildsBean.CountyChildsBean.StreetChildsBean> streetChildsBeans = new ArrayList<>();
-
-
 
     public void setOnTopClicklistener(PickAddressInterface pickAddressInterface) {
         this.pickAddressInterface = pickAddressInterface;
@@ -202,6 +166,7 @@ public class PickAddressView extends LinearLayout {
 
     public void setData(List<AddressBean> beans) {
         addressBeanList = beans;
+
         cityChildsBeans.clear();
 
         for (int i = 0; i < addressBeanList.size(); i++) {
@@ -230,13 +195,7 @@ public class PickAddressView extends LinearLayout {
         mCurrentDistrictName = mDistrictData.get(0);
 
         streetChildsBeans = countyChildsBeans.get(0).getChilds();
-        ArrayList<String> mStreetData = new ArrayList<>();
-        for (int i = 0; i < streetChildsBeans.size(); i++) {
-            mStreetData.add(streetChildsBeans.get(i).getName());
-        }
-        mStreetPicker.setData(mStreetData);
-        mStreetPicker.setDefault(0);
-        mCurrentStreetName = mStreetData.get(0);
+
     }
 
     public void onDistory() {
@@ -246,7 +205,6 @@ public class PickAddressView extends LinearLayout {
         streetChildsBeans.clear();
         mProvincePicker.resetData(new ArrayList<String>());
         mCountyPicker.resetData(new ArrayList<String>());
-        mStreetPicker.resetData(new ArrayList<String>());
         mCountyPicker.resetData(new ArrayList<String>());
     }
 }
